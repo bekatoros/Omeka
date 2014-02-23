@@ -4,6 +4,8 @@ echo head(array('title' => 'Edit Front'));
 
 <h1>Front page building will go here</h1>
 
+<?php echo common('appearance-nav'); ?>
+<?php echo flash(); ?>
 <p>Something similar to the navigation editing, with drag-drop blocks into order,
 and into different regions, if the current public theme defines a primary and secondary
 </p>

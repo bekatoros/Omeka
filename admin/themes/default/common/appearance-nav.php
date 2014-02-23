@@ -8,6 +8,10 @@
             'privilege' => 'edit'
         ),
         array(
+            'label' => __('Front Page'),
+            'uri'   => url('appearance/edit-front')      
+        ),
+        array(
             'label' => __('Navigation'),
             'uri' => url('appearance/edit-navigation')
         ),

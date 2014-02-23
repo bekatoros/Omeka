@@ -9,6 +9,28 @@
  * @package Omeka\Function
  */
 
+
+function front_page_region($region)
+{
+    $optionsBlocks = unserialize(get_option("front_page_$region"));
+    $html = '';
+    foreach($optionsBlocks as $block) {
+        $html .= "<div class=''>";
+        $html .= "<h2>" . $block['heading'] . "</h2>";
+        $id = Inflector::classify($block['name']);
+        if(isset($block['callback_params'])) {
+            $html .= "<div class='$id' id='$id'>" . call_user_func($block['callback'], $block['callback_params']) . "</div>";    
+        } else {
+            $html .= "<div class='$id' id='$id'>" . call_user_func($block['callback']) . "</div>";            
+        }
+        
+        $html .= "</div>";
+    }
+    
+    return $html;;
+}
+
+
 /**
  * Get an option from the options table.
  *

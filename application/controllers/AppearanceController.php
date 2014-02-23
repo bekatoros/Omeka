@@ -74,4 +74,16 @@ class AppearanceController extends Omeka_Controller_AbstractActionController
         }
         
     }
+    
+    public function editFrontAction()
+    {
+        //on admin side, the current theme isn't loaded, so dig it up
+        //and grab the front_page_blocks filter if it's there
+        $themeName = Theme::getCurrentThemeName('public');
+        $publicTheme = Theme::getTheme($themeName);
+        $themePath = $publicTheme->getScriptPath();
+        require_once($themePath . '/custom.php');
+        $availableBlocks = apply_filters('front_page_blocks', array());
+        $this->view->availableBlocks = $availableBlocks;
+    }
 }

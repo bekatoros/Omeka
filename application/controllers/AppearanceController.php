@@ -84,6 +84,31 @@ class AppearanceController extends Omeka_Controller_AbstractActionController
         $themePath = $publicTheme->getScriptPath();
         require_once($themePath . '/custom.php');
         $availableBlocks = apply_filters('front_page_blocks', array());
-        $this->view->availableBlocks = $availableBlocks;
+
+        if(isset($_POST['submit'])) {
+            $primaryOrder = array_flip($_POST['primary']);
+            ksort($primaryOrder);
+            $primary = array();
+            foreach($primaryOrder as $key=>$blockName) {
+                if($key != 'no') {
+                    $primary[$blockName] = $availableBlocks[$blockName];
+                }
+            }
+            $secondaryOrder = array_flip($_POST['secondary']);
+            ksort($secondaryOrder);
+            $secondary = array();
+            foreach($secondaryOrder as $key=>$blockName) {
+                if($key != 'no') {
+                    $secondary[$blockName] = $availableBlocks[$blockName];
+                }
+            }
+            
+            set_option('front_page_primary', json_encode($primary));
+            set_option('front_page_secondary', json_encode($secondary));
+        }
+        $this->view->available = $availableBlocks;
+        $this->view->primary = json_decode(get_option('front_page_primary'), true);
+        $this->view->secondary = json_decode(get_option('front_page_secondary'), true);        
+        
     }
 }

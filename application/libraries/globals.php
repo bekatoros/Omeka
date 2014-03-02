@@ -12,18 +12,27 @@
 
 function front_page_region($region)
 {
-    $optionsBlocks = unserialize(get_option("front_page_$region"));
+    $optionsBlocks = json_decode(get_option("front_page_$region"), true);
+    $view = get_view();
     $html = '';
     foreach($optionsBlocks as $block) {
-        $html .= "<div class=''>";
-        $html .= "<h2>" . $block['heading'] . "</h2>";
-        $id = Inflector::classify($block['name']);
-        if(isset($block['callback_params'])) {
-            $html .= "<div class='$id' id='$id'>" . call_user_func($block['callback'], $block['callback_params']) . "</div>";    
-        } else {
-            $html .= "<div class='$id' id='$id'>" . call_user_func($block['callback']) . "</div>";            
+        $atts = '';
+        if(isset($block['wrap_attributes'])) {
+            foreach($block['wrap_attributes'] as $property=>$value) {
+                $atts .= " $property='$value'";
+            }            
         }
-        
+
+        $html .= "<div $atts >";
+        if(isset($block['heading_url'])) {
+            $url = call_user_func($block['heading_url'], $block, $view);
+            $heading = "<a href='$url'>{$block['heading']}</a>";
+        } else {
+            $heading = $block['heading'];
+        }
+        $html .= "<h2>$heading</h2>";
+        $id = Inflector::tableize($block['name']);
+        $html .= "<div class='$id' id='$id'>" . call_user_func($block['callback'], $block, $view) . "</div>";
         $html .= "</div>";
     }
     

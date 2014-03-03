@@ -9,6 +9,8 @@ echo head(array('title' => 'Edit Front'));
 
 <form id="appearance-form" method="post">
 
+<?php if(get_option('homepage_uri') == '/'): ?>
+
 <section class="seven columns alpha">
 <p>Something similar to the navigation editing, with drag-drop blocks into order,
 and into different regions, if the current public theme defines a primary and secondary
@@ -89,4 +91,7 @@ print_r(array_keys($available));
 
 </section>
 
+<?php else: ?>
+<p>The homepage is set to one of the navigation pages</p>
+<?php endif;?>
 <?php echo foot(); ?>

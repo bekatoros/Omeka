@@ -1278,6 +1278,7 @@ function random_featured_collection()
     $collection = get_random_featured_collection();
     if ($collection) {
         $html = get_view()->partial('collections/single.php', array('collection' => $collection));
+        release_object($collection);
     } else {
         $html = '<p>' . __('No featured collections are available.') . '</p>';
     }
@@ -2211,6 +2212,28 @@ function get_random_featured_items($num = 5, $hasImage = null)
 }
 
 /**
+ * Return HTML for recent items.
+ *
+ * @package Omeka\Function\View\Item
+ * @uses get_random_featured_items()
+ * @param int $count
+ * @return string
+ */
+function recent_items($count = 10)
+{
+    $items = get_recent_items($count);
+    if ($items) {
+        $html = '';
+        foreach ($items as $item) {
+            $html .= get_view()->partial('items/single.php', array('item' => $item));
+            release_object($item);
+        }
+    } else {
+        $html = '<p>' . __('No recent items available.') . '</p>';
+    }
+    return $html;
+}
+/**
  * Return HTML for random featured items.
  * 
  * @package Omeka\Function\View\Item
@@ -2229,6 +2252,7 @@ function random_featured_items($count = 5, $hasImage = null)
         $html = '';
         foreach ($items as $item) {
             $html .= get_view()->partial('items/single.php', array('item' => $item));
+            release_object($item);
         }
     } else {
         $html = '<p>' . __('No featured items are available.') . '</p>';
